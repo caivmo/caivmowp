@@ -1,10 +1,5 @@
-name: Deploy to Pantheon (Dev Environment)
-
-on:
-  push:
-    branches:
-      - main
-
+on: push
+name: Push
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -20,3 +15,4 @@ jobs:
       run: |
         echo $TERMINUS_MACHINE_TOKEN
         echo $PANTHEON_SITE
+
