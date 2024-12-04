@@ -21,6 +21,7 @@ jobs:
         # Authenticate with Pantheon using TERMINUS_MACHINE_TOKEN
         terminus auth:login --machine-token="${TERMINUS_MACHINE_TOKEN}"
 
+        
         # Set the connection mode to Git for the specified site
         terminus connection:set "${PANTHEON_SITE}.dev" git
 
