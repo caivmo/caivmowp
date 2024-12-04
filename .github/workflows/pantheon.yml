@@ -1,34 +1,16 @@
-name: Deploy to Pantheon (Dev Environment)
-
-on:
-  push:
-    branches:
-      - main  # Trigger deployment on push to the main branch
-
+on: push
+name: Push
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Deploy to Pantheon Dev
-      env:
-        TERMINUS_MACHINE_TOKEN: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
-        PANTHEON_SITE: ${{ secrets.PANTHEON_SITE_NAME }}
-      run: |
-        # Install Terminus
-        curl -L https://github.com/pantheon-systems/terminus/releases/latest/download/terminus.phar -o terminus
-        chmod +x terminus
-        sudo mv terminus /usr/local/bin/terminus
-
-        # Authenticate with Pantheon
-        terminus auth:login --machine-token="$TERMINUS_MACHINE_TOKEN"
-
-        # Set the connection mode to Git
-        terminus connection:set $PANTHEON_SITE.dev git
-
-        # Add Pantheon remote and push code
-        git remote add pantheon ssh://codeserver.dev.$PANTHEON_SITE@codeserver.dev.$PANTHEON_SITE.drush.in:2222/~/repository.git
-        git push -f pantheon main
+      - uses: actions/checkout@v2
+      - name: Run a one-line script
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: ${{ github.repository }}
+          tag_with_ref: true
+          tag_with_sha: true
+          tags: ${{ github.sha }}
