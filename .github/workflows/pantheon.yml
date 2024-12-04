@@ -11,8 +11,8 @@ jobs:
     - name: Deploy to Pantheon Dev
       env:
         TERMINUS_MACHINE_TOKEN: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
-        PANTHEON_SITE: ${{ secrets.PANTHEON_SITE_NAME }}
+        PANTHEON_SITE_NAME: ${{ vars.PANTHEON_SITE_NAME }}
       run: |
         echo $TERMINUS_MACHINE_TOKEN
-        echo $PANTHEON_SITE
+        echo $PANTHEON_SITE_NAME
 
