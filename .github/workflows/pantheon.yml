@@ -24,3 +24,4 @@ jobs:
       run: |
         git remote add pantheon $pantheon_repo
         git push pantheon HEAD:master
+        
