@@ -14,14 +14,13 @@ jobs:
         key: ${{ secrets.PANTHEON_SSH_KEY }}
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
-    - name: Set up Panthero Git Remote
+    - name: Set up Pantheon Git Remote
       env:
         pantheon_repo: ${{ secrets.PANTHEON_REPO }}
       run: |
-        echo $pantheon_repo
-        #git remote add pantheon $pantheon_repo
+        git remote add pantheon $pantheon_repo
     
     - name: Push to Pantheon
       run: |
-        echo $ssh-private-key
-        echo $pantheon_repo
+        git remote add pantheon $pantheon_repo
+        git push pantheon HEAD:master
