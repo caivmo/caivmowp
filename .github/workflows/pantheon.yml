@@ -12,8 +12,7 @@ jobs:
       env:
         ssh: '${{ secrets.PANTHEON_SSH_KEY }}'
       run: |
-        echo $pantheon_repo
-        cat ~/.ssh/id_rsa
+        echo $ssh
 
     - name: Set up Panthero Git Remote
       env:
