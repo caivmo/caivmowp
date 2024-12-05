@@ -22,4 +22,5 @@ jobs:
     
     - name: Push to Pantheon
       run: |
-        git push pantheon HEAD:master
+        git pull pantheon
+        git push pantheon
