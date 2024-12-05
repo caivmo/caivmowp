@@ -8,28 +8,20 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
     
+    - name: Setup SSH
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
     - name: Set up Panthero Git Remote
       env:
         pantheon_repo: ${{ secrets.PANTHEON_REPO }}
-        test_text: ${{ secrets.TESTING }}
       run: |
-        echo "$test_text"
-        echo "$pantheon_repo"
-
-    - name: Check Secret Values
+        echo $pantheon_repo
+        #git remote add pantheon $pantheon_repo
+    
+    - name: Push to Pantheon
       run: |
-        if [ -z "$test_text" ]; then
-          echo "The secret TESTING is empty or not set."
-        else
-          echo "The secret TESTING is set correctly."
-        fi
-
-        if [ -z "$pantheon_repo" ]; then
-          echo "The secret PANTHEON_REPO is empty or not set."
-        else
-          echo "The secret PANTHEON_REPO is set correctly."
-        fi
-
-
-        
+        echo $ssh-private-key
+        echo $pantheon_repo
