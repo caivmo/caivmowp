@@ -16,3 +16,17 @@ jobs:
       run: |
         echo "$test_text"
         echo "$pantheon_repo"
+        
+    - name: Check Secret Values
+      run: |
+        if [ -z "$test_text" ]; then
+          echo "The secret TESTING is empty or not set."
+        else
+          echo "The secret TESTING is set correctly."
+        fi
+
+        if [ -z "$pantheon_repo" ]; then
+          echo "The secret PANTHEON_REPO is empty or not set."
+        else
+          echo "The secret PANTHEON_REPO is set correctly."
+        fi
