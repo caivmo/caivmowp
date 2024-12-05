@@ -16,7 +16,7 @@ jobs:
 
     - name: Set up Pantheon Git Remote
       env:
-        pantheon_repo: ${{ secrets.PANTHEON_REPO }}
+        pantheon_repo: ${{ vars.PANTHEON_REPO }}
       run: |
         echo $pantheon_repo
     
