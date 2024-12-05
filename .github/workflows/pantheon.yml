@@ -14,5 +14,5 @@ jobs:
         pantheon_repo: ${{ secrets.PANTHEON_REPO }}
         test_text: ${{ secrets.TESTING }}
       run: |
-        echo $test_text
-        echo $pantheon_repo
+        echo "$test_text"
+        echo "$pantheon_repo"
