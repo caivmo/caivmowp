@@ -2,7 +2,7 @@ on: push
 name: Push
 jobs:
   deploy:
-    runs-on: [self-hosted]
+    runs-on: self-hosted
 
     steps:
     - name: Checkout Code
