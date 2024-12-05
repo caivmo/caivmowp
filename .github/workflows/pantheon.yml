@@ -8,11 +8,12 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
     
-    - name: Setup SSH
-      uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ secrets.PANTHEON_SSH_KEY }}
-        known_hosts: ${{ secrets.KNOWN_HOSTS }}
+    - name: Set up Panthero Git Remote
+      env:
+        ssh: '${{ secrets.PANTHEON_SSH_KEY }}'
+      run: |
+        echo $pantheon_repo
+        cat ~/.ssh/id_rsa
 
     - name: Set up Panthero Git Remote
       env:
