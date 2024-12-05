@@ -18,10 +18,8 @@ jobs:
       env:
         pantheon_repo: ${{ vars.PANTHEON_REPO }}
       run: |
-        echo $pantheon_repo
+        git remote add pantheon $pantheon_repo
     
     - name: Push to Pantheon
       run: |
-        git remote add pantheon $pantheon_repo
         git push pantheon HEAD:master
-        
