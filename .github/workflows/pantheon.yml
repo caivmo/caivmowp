@@ -5,16 +5,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: shimataro/ssh-key-action@v2.4.0
+    - name: Checkout Code
+      uses: actions/checkout@v3
+    
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.4
       with:
-        key: ${{ secrets.SSH_KEY }}
+        ssh-private-key: ${{ secrets.SSH_KEY }}
 
-    - name: deployer
+    - name: Set up Panthero Git Remote
       env:
         pantheon_repo: '${{ secrets.PANTHEON_REPO }}'
       run: |
-        echo $pantheon_repo
-        echo $key
-        #git remote add pantheon $pantheon_repo
-        #git push pantheon HEAD:master
+        git remote add pantheon $pantheon_repo
+    
+    - name: Push to Pantheon
+      run: |
+        git push pantheon
