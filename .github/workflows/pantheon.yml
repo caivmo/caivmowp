@@ -8,20 +8,11 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
     
-    - name: Setup SSH
-      uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ secrets.PANTHEON_SSH_KEY }}
-        name: id_rsa
 
     - name: Set up Panthero Git Remote
       env:
         pantheon_repo: ${{ secrets.PANTHEON_REPO }}
+        test_text: ${{ secrets.TESTING }}
       run: |
-        echo $pantheon_repo
-        #git remote add pantheon $pantheon_repo
-    
-    - name: Push to Pantheon
-      run: |
-        echo $ssh-private-key
+        echo $test_text
         echo $pantheon_repo
