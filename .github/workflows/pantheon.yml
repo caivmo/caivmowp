@@ -5,27 +5,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
+    - uses: shimataro/ssh-key-action@v2.4.0
+      with:
+        key: ${{ secrets.PANTHEON_SSH_KEY }}
 
-    - name: Deploy to Pantheon Dev
+    - name: deployer
       env:
-        TERMINUS_MACHINE_TOKEN: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
-        PANTHEON_SITE_NAME: ${{ vars.PANTHEON_SITE_NAME }}
+        pantheon_repo: '${{ secrets.PANTHEON_REPO }}'
       run: |
-        # Install Terminus
-        curl -L https://github.com/pantheon-systems/terminus/releases/latest/download/terminus.phar -o terminus
-        chmod +x terminus
-        sudo mv terminus /usr/local/bin/terminus
-
-        # Authenticate with Pantheon using TERMINUS_MACHINE_TOKEN
-        terminus auth:login --machine-token="${TERMINUS_MACHINE_TOKEN}"
-
-        
-        # Set the connection mode to Git for the specified site
-        terminus connection:set "${PANTHEON_SITE}.dev" git
-
-        # Add Pantheon as a remote and push code to the dev environment
-        git remote add pantheon ssh://codeserver.dev.${PANTHEON_SITE}@codeserver.dev.${PANTHEON_SITE}.drush.in:2222/~/repository.git
-        git push -f pantheon main
-
+        git remote add pantheon $pantheon_repo
+        git push pantheon HEAD:master
