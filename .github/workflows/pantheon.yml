@@ -17,8 +17,10 @@ jobs:
       env:
         pantheon_repo: '${{ secrets.PANTHEON_REPO }}'
       run: |
-        git remote add pantheon $pantheon_repo
+        echo $pantheon_repo
+        #git remote add pantheon $pantheon_repo
     
     - name: Push to Pantheon
       run: |
-        git push pantheon
+        echo $ssh-private-key
+        echo $pantheon_repo
