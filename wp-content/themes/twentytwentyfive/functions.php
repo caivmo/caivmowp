@@ -156,3 +156,11 @@ if ( ! function_exists( 'twentytwentyfive_format_binding' ) ) :
 		}
 	}
 endif;
+
+if( ! function_exists( 'clear_cache_custom' ) ) :
+    function clear_cache_custom($post_id) {
+        pantheon_clean_post_cache($post_id);
+    }
+endif;
+
+add_action('save_post', 'clear_cache_custom' );
