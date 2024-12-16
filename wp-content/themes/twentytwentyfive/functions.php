@@ -157,6 +157,16 @@ if ( ! function_exists( 'twentytwentyfive_format_binding' ) ) :
 	}
 endif;
 
+/**
+ * Add surrogate key for the featured content sidebar rendered on the homepage.
+ */
+add_filter( 'pantheon_wp_main_query_surrogate_keys', function( $keys ){
+	if ( is_home() ) {
+		$keys[] = 'sidebar-home-featured';
+	}
+	return $keys;
+});
+	/*
 if (function_exists('pantheon_add_edge_cache_tag')) {
 	function pantheon_add_edge_cache_tag( $post_id ) {
 		add_filter( 'pantheon_wp_main_query_surrogate_keys', function( $keys, $post_id ){
@@ -170,3 +180,4 @@ if (function_exists('pantheon_add_edge_cache_tag')) {
 }
 
 add_action("save_post", "pantheon_add_edge_cache_tag");
+*/
