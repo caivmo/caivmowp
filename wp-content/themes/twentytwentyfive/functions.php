@@ -159,7 +159,8 @@ endif;
 
 if( ! function_exists( 'clear_cache_custom' ) ) :
     function clear_cache_custom($post_id) {
-        clean_post_cache($post_id);
+	var_dump($post_id);
+	die();
     }
 endif;
 add_action('save_post', 'clear_cache_custom' );
