@@ -157,9 +157,7 @@ if ( ! function_exists( 'twentytwentyfive_format_binding' ) ) :
 	}
 endif;
 
-if( ! function_exists( 'clear_cache_custom' ) ) :
-    function clear_cache_custom($post_id) {
-	    
-    }
-endif;
-add_action('save_post', 'clear_cache_custom' );
+if (function_exists('pantheon_clear_edge_all_cache')) {
+	pantheon_clear_edge_all_cache(['custom-key']);
+}
+add_action('save_post', 'pantheon_clear_edge_all_cache' );
