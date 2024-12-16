@@ -157,7 +157,9 @@ if ( ! function_exists( 'twentytwentyfive_format_binding' ) ) :
 	}
 endif;
 
-if (function_exists('pantheon_clear_edge_all_cache')) {
-	pantheon_clear_edge_all_cache(['custom-key']);
-}
-add_action('save_post', 'pantheon_clear_edge_all_cache' );
+add_filter( 'pantheon_wp_main_query_surrogate_keys', function( $keys ){
+	if ( is_home() ) {
+		$keys[] = 'sidebar-home-featured';
+	}
+	return $keys;
+});
