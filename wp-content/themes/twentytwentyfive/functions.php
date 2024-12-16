@@ -157,9 +157,16 @@ if ( ! function_exists( 'twentytwentyfive_format_binding' ) ) :
 	}
 endif;
 
-add_filter( 'pantheon_wp_main_query_surrogate_keys', function( $keys ){
-	if ( is_home() ) {
-		$keys[] = 'sidebar-home-featured';
+if (function_exists('pantheon_add_edge_cache_tag')) {
+	function pantheon_add_edge_cache_tag( $post_id ) {
+		add_filter( 'pantheon_wp_main_query_surrogate_keys', function( $keys, $post_id ){
+			if ( is_home() ) {
+				$keys[] = 'post-' . $post_id;
+			}
+			return $keys;
+		});
 	}
-	return $keys;
-});
+
+}
+
+add_action("save_post", "pantheon_add_edge_cache_tag");
