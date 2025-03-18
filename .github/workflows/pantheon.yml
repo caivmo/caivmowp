@@ -16,41 +16,41 @@ jobs:
     - name: Set up PHP and Composer
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.1'  # Ajusta la versión si es necesario
+        php-version: '8.2'
         tools: composer
 
     # 3️⃣ Instalar dependencias con Composer
     - name: Install Dependencies
       run: composer install --no-dev --optimize-autoloader
 
-    # 4️⃣ Configurar SSH para conectarse a Pantheon
+    # 4️⃣ Configurar SSH para Pantheon
     - name: Setup SSH
       uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.PANTHEON_SSH_KEY }}
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
-    # 5️⃣ Configurar el remoto de Pantheon
-    - name: Set up Pantheon Git Remote
+    # 5️⃣ Configurar Terminus (CLI de Pantheon)
+    - name: Install Terminus
+      run: |
+        curl -L https://pantheon.io/terminus/install | bash
+        echo "$HOME/.composer/vendor/bin" >> $GITHUB_PATH
+
+    # 6️⃣ Autenticación en Pantheon con Terminus
+    - name: Authenticate with Pantheon
+      run: |
+        terminus auth:login --machine-token=HYSrxSfumEH3QtM9mJmqaqiC9A3BHMtH1hc6xxO0o-q5K
+
+    # 7️⃣ Hacer deploy a Pantheon
+    - name: Push to Pantheon
       env:
         pantheon_repo: ${{ vars.PANTHEON_REPO }}
-      run: |
-        git remote add pantheon $pantheon_repo || echo "Remote already exists"
+      run: git push $pantheon_repo HEAD:master
 
-    # 6️⃣ Obtener y rebasar cambios de Pantheon
-    - name: Fetch and Rebase Changes
-      run: |
-        git fetch pantheon master
-        git rebase pantheon/master || echo "No changes to rebase"
-
-    # 7️⃣ Hacer el push del código a Pantheon
-    - name: Push to Pantheon
-      run: git push pantheon HEAD:master
-
-    # 8️⃣ Ejecutar composer install en Pantheon
+    # 8️⃣ Ejecutar `composer install` en Pantheon usando Terminus
     - name: Run Composer Install on Pantheon
       env:
-        PANTHEON_ENV: dev  # Usa la variable configurada en GitHub
-        PANTHEON_SITE: "36c52dec-49a8-4f16-b1bb-ba5301db5bf4"  # Reemplázalo con el nombre real de tu sitio en Pantheon
+        PANTHEON_SITE: "36c52dec-49a8-4f16-b1bb-ba5301db5bf4"
+        PANTHEON_ENV: "dev"
       run: |
-        ssh -o StrictHostKeyChecking=no codeserver.$PANTHEON_ENV.$PANTHEON_SITE@appserver.$PANTHEON_ENV.$PANTHEON_SITE.drush.in "cd ~/code && composer install --no-dev --optimize-autoloader"
+        terminus remote:drush $PANTHEON_SITE.$PANTHEON_ENV -- composer install --no-dev --optimize-autoloader
