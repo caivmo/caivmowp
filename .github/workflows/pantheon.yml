@@ -46,4 +46,4 @@ jobs:
         PANTHEON_SITE: "36c52dec-49a8-4f16-b1bb-ba5301db5bf4"
         PANTHEON_ENV: "dev"
       run: |
-        terminus env:exec $PANTHEON_SITE.$PANTHEON_ENV -- composer install --no-dev --optimize-autoloader
+        terminus ssh $PANTHEON_SITE.$PANTHEON_ENV -- 'cd ~/code && composer install --no-dev --optimize-autoloader'
