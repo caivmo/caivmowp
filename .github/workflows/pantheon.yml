@@ -1,39 +1,56 @@
 on: push
 name: Deploy to Pantheon
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+    
+    # 1️⃣ Checkout del código
     - name: Checkout Code
       uses: actions/checkout@v3
       with:
         fetch-depth: 0  # Obtiene todo el historial de Git
 
+    # 2️⃣ Configurar PHP y Composer
     - name: Set up PHP and Composer
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.1'  # Ajusta la versión si es necesario
         tools: composer
 
+    # 3️⃣ Instalar dependencias con Composer
     - name: Install Dependencies
       run: composer install --no-dev --optimize-autoloader
 
+    # 4️⃣ Configurar SSH para conectarse a Pantheon
     - name: Setup SSH
       uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.PANTHEON_SSH_KEY }}
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
+    # 5️⃣ Configurar el remoto de Pantheon
     - name: Set up Pantheon Git Remote
       env:
         pantheon_repo: ${{ vars.PANTHEON_REPO }}
       run: |
         git remote add pantheon $pantheon_repo || echo "Remote already exists"
 
+    # 6️⃣ Obtener y rebasar cambios de Pantheon
     - name: Fetch and Rebase Changes
       run: |
         git fetch pantheon master
         git rebase pantheon/master || echo "No changes to rebase"
 
+    # 7️⃣ Hacer el push del código a Pantheon
     - name: Push to Pantheon
       run: git push pantheon HEAD:master
+
+    # 8️⃣ Ejecutar composer install en Pantheon
+    - name: Run Composer Install on Pantheon
+      env:
+        PANTHEON_ENV: dev  # Usa la variable configurada en GitHub
+        PANTHEON_SITE: "caivmowp"  # Reemplázalo con el nombre real de tu sitio en Pantheon
+      run: |
+        ssh -o StrictHostKeyChecking=no codeserver.$PANTHEON_ENV.$PANTHEON_SITE@appserver.$PANTHEON_ENV.$PANTHEON_SITE.drush.in "cd ~/code && composer install --no-dev --optimize-autoloader"
