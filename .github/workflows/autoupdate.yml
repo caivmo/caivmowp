@@ -32,6 +32,6 @@ jobs:
     - name: Push Changes to Specific Branch
       env:
         BRANCH_NAME: "plugin-updates"  # Cambia esto por el nombre del branch que desees
-        GITHUB_TOKEN: ${{ vars.TOKEN_IV }}
+        GITHUB_TOKEN: ${{ secrets.TOKEN_IV }}
       run: |
         git push origin HEAD:$BRANCH_NAME
