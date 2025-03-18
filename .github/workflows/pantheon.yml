@@ -6,54 +6,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     
-    # 1️⃣ Checkout del código
     - name: Checkout Code
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0  # Obtiene todo el historial de Git
+        fetch-depth: 0  
 
-    # 2️⃣ Configurar PHP y Composer
     - name: Set up PHP and Composer
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.2'
+        php-version: '8.1'
         tools: composer
 
-    # 3️⃣ Instalar dependencias con Composer
     - name: Install Dependencies
       run: composer install --no-dev --optimize-autoloader
 
-    # 4️⃣ Configurar SSH para Pantheon
     - name: Setup SSH
       uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.PANTHEON_SSH_KEY }}
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
-    # 5️⃣ Instalar Terminus manualmente
     - name: Install Terminus
       run: |
         mkdir -p ~/terminus && cd ~/terminus
         curl -L https://github.com/pantheon-systems/terminus/releases/download/3.6.2/terminus.phar --output terminus
         chmod +x terminus
-        ./terminus self:update
         sudo ln -s ~/terminus/terminus /usr/local/bin/terminus
 
-    # 6️⃣ Autenticación en Pantheon con Terminus
     - name: Authenticate with Pantheon
-      run: |
-        terminus auth:login --machine-token=HYSrxSfumEH3QtM9mJmqaqiC9A3BHMtH1hc6xxO0o-q5K
+      run: terminus auth:login --machine-token=HYSrxSfumEH3QtM9mJmqaqiC9A3BHMtH1hc6xxO0o-q5K
 
-    # 7️⃣ Hacer deploy a Pantheon
     - name: Push to Pantheon
       env:
         pantheon_repo: ${{ vars.PANTHEON_REPO }}
       run: git push $pantheon_repo HEAD:master
 
-    # 8️⃣ Ejecutar `composer install` en Pantheon usando Terminus
     - name: Run Composer Install on Pantheon
       env:
         PANTHEON_SITE: "36c52dec-49a8-4f16-b1bb-ba5301db5bf4"
         PANTHEON_ENV: "dev"
       run: |
-        terminus remote:drush $PANTHEON_SITE.$PANTHEON_ENV -- composer install --no-dev --optimize-autoloader
+        terminus env:exec $PANTHEON_SITE.$PANTHEON_ENV -- composer install --no-dev --optimize-autoloader
