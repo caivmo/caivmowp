@@ -30,11 +30,14 @@ jobs:
         key: ${{ secrets.PANTHEON_SSH_KEY }}
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
-    # 5️⃣ Configurar Terminus (CLI de Pantheon)
+    # 5️⃣ Instalar Terminus manualmente
     - name: Install Terminus
       run: |
-        curl -L https://pantheon.io/terminus/install | bash
-        echo "$HOME/.composer/vendor/bin" >> $GITHUB_PATH
+        mkdir -p ~/terminus && cd ~/terminus
+        curl -L https://github.com/pantheon-systems/terminus/releases/download/3.6.2/terminus.phar --output terminus
+        chmod +x terminus
+        ./terminus self:update
+        sudo ln -s ~/terminus/terminus /usr/local/bin/terminus
 
     # 6️⃣ Autenticación en Pantheon con Terminus
     - name: Authenticate with Pantheon
