@@ -51,6 +51,6 @@ jobs:
     - name: Run Composer Install on Pantheon
       env:
         PANTHEON_ENV: dev  # Usa la variable configurada en GitHub
-        PANTHEON_SITE: "caivmowp"  # Reemplázalo con el nombre real de tu sitio en Pantheon
+        PANTHEON_SITE: "36c52dec-49a8-4f16-b1bb-ba5301db5bf4"  # Reemplázalo con el nombre real de tu sitio en Pantheon
       run: |
-        ssh -o StrictHostKeyChecking=no codeserver.$PANTHEON_ENV.$PANTHEON_SITE@appserver.$PANTHEON_ENV.$PANTHEON_SITE.drush.in "cd ~/code && composer install --no-dev --optimize-autoloader"
+        ssh -o StrictHostKeyChecking=no appserver.$PANTHEON_ENV.$PANTHEON_SITE@appserver.$PANTHEON_ENV.$PANTHEON_SITE.drush.in "cd ~/code && composer install --no-dev --optimize-autoloader"
