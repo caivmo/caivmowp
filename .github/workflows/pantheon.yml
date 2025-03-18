@@ -1,49 +1,24 @@
 on: push
-name: Deploy to Pantheon
-
+name: Push
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    
     - name: Checkout Code
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0  
-
-    - name: Set up PHP and Composer
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.1'
-        tools: composer
-
-    - name: Install Dependencies
-      run: composer install --no-dev --optimize-autoloader
-
+      uses: actions/checkout@v1
+    
     - name: Setup SSH
       uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.PANTHEON_SSH_KEY }}
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
-    - name: Install Terminus
-      run: |
-        mkdir -p ~/terminus && cd ~/terminus
-        curl -L https://github.com/pantheon-systems/terminus/releases/download/3.6.2/terminus.phar --output terminus
-        chmod +x terminus
-        sudo ln -s ~/terminus/terminus /usr/local/bin/terminus
-
-    - name: Authenticate with Pantheon
-      run: terminus auth:login --machine-token=HYSrxSfumEH3QtM9mJmqaqiC9A3BHMtH1hc6xxO0o-q5K
-
-    - name: Push to Pantheon
+    - name: Set up Pantheon Git Remote
       env:
         pantheon_repo: ${{ vars.PANTHEON_REPO }}
-      run: git push $pantheon_repo HEAD:master
-
-    - name: Run Composer Install on Pantheon
-      env:
-        PANTHEON_SITE: "36c52dec-49a8-4f16-b1bb-ba5301db5bf4"
-        PANTHEON_ENV: "dev"
       run: |
-        terminus ssh $PANTHEON_SITE.$PANTHEON_ENV -- 'cd ~/code && composer install --no-dev --optimize-autoloader'
+        git remote add pantheon $pantheon_repo
+    
+    - name: Push to Pantheon
+      run: |
+        git push pantheon HEAD:master
