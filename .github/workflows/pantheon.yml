@@ -1,5 +1,5 @@
 on: push
-name: Push
+name: Deploy to Pantheon
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -7,7 +7,16 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0
+        fetch-depth: 0  # Obtiene todo el historial de Git
+
+    - name: Set up PHP and Composer
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'  # Ajusta la versión si es necesario
+        tools: composer
+
+    - name: Install Dependencies
+      run: composer install --no-dev --optimize-autoloader
 
     - name: Setup SSH
       uses: shimataro/ssh-key-action@v2
@@ -28,7 +37,3 @@ jobs:
 
     - name: Push to Pantheon
       run: git push pantheon HEAD:master
-
-    - name: Run Composer Install on Pantheon
-      run: |
-        ssh -p 2222 -o StrictHostKeyChecking=no codeserver.dev.36c52dec-49a8-4f16-b1bb-ba5301db5bf4.drush.in "cd ~/code && composer install --no-dev --optimize-autoloader"
