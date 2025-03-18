@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v1
+      uses: actions/checkout@v3
     
     - name: Setup SSH
       uses: shimataro/ssh-key-action@v2
@@ -20,5 +20,8 @@ jobs:
         git remote add pantheon $pantheon_repo
     
     - name: Push to Pantheon
+      run: git push pantheon HEAD:master
+    
+    - name: Run Composer Install on Pantheon
       run: |
-        git push pantheon HEAD:master
+        ssh -o StrictHostKeyChecking=no pantheon "cd /var/www/html && composer install --no-dev --optimize-autoloader"
