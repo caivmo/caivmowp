@@ -7,7 +7,7 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0  # Asegura que obtenemos todo el historial de Git
+        fetch-depth: 0
 
     - name: Setup SSH
       uses: shimataro/ssh-key-action@v2
@@ -19,16 +19,16 @@ jobs:
       env:
         pantheon_repo: ${{ vars.PANTHEON_REPO }}
       run: |
-        git remote add pantheon $pantheon_repo
+        git remote add pantheon $pantheon_repo || echo "Remote already exists"
 
     - name: Fetch and Rebase Changes
       run: |
         git fetch pantheon master
-        git rebase pantheon/master
+        git rebase pantheon/master || echo "No changes to rebase"
 
     - name: Push to Pantheon
       run: git push pantheon HEAD:master
 
     - name: Run Composer Install on Pantheon
       run: |
-        ssh -o StrictHostKeyChecking=no pantheon "cd /var/www/html && composer install --no-dev --optimize-autoloader"
+        ssh -p 2222 -o StrictHostKeyChecking=no codeserver.dev.36c52dec-49a8-4f16-b1bb-ba5301db5bf4.drush.in "cd ~/code && composer install --no-dev --optimize-autoloader"
