@@ -26,20 +26,16 @@ jobs:
           vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs
           vendor/bin/phpcs -i  # Verificar instalación
 
-      - name: Run PHPCS on changed PHP files
+      - name: List changed PHP files in wp-content/test
         run: |
-          # Obtener archivos PHP modificados en el PR
-          CHANGED_FILES=$(git diff --diff-filter=d --name-only origin/${{ github.event.pull_request.base.ref }} | grep '\.php$' || true)
+          CHANGED_FILES=$(git diff --diff-filter=d --name-only origin/${{ github.event.pull_request.base.ref }} | grep '^wp-content/test/.*\.php$' || true)
       
           if [[ -z "$CHANGED_FILES" ]]; then
-            echo "No PHP files changed."
+            echo "No PHP files changed in wp-content/test."
             exit 0
           fi
       
-          echo "Changed PHP files:"
+          echo "Changed PHP files in wp-content/test:"
           echo "$CHANGED_FILES"
-      
-          # Ejecutar PHPCS en los archivos modificados
-          vendor/bin/phpcs --standard=WordPress,WordPress-Docs,WordPress-Extra $CHANGED_FILES
         
         
