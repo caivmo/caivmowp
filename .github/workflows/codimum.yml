@@ -28,12 +28,18 @@ jobs:
 
       - name: Run PHPCS on changed PHP files
         run: |
-          # Obtenemos la lista de archivos PHP modificados entre la base del PR y el commit actual
-          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '\.php$' || true)
-          if [ -z "$CHANGED_FILES" ]; then
+          # Obtener archivos PHP modificados en el PR
+          CHANGED_FILES=$(git diff --diff-filter=d --name-only origin/${{ github.event.pull_request.base.ref }} | grep '\.php$' || true)
+      
+          if [[ -z "$CHANGED_FILES" ]]; then
             echo "No PHP files changed."
             exit 0
           fi
-          echo "Changed PHP files: $CHANGED_FILES"
+      
+          echo "Changed PHP files:"
+          echo "$CHANGED_FILES"
+      
+          # Ejecutar PHPCS en los archivos modificados
           vendor/bin/phpcs --standard=WordPress,WordPress-Docs,WordPress-Extra $CHANGED_FILES
+        
         
