@@ -1,0 +1,43 @@
+name: PHP Code Review
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  code_review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: phpstan, psalm, composer
+
+      - name: Install dependencies
+        run: composer install --no-progress --no-suggest
+
+      - name: Run PHPStan
+        run: phpstan analyse src --level=max
+
+      - name: Run Psalm
+        run: psalm
+
+      - name: Run CodiumAI Review
+        uses: CodiumAI/github-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: php-code-review
+          path: reports/
