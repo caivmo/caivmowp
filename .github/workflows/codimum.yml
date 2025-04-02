@@ -25,19 +25,14 @@ jobs:
       - name: Install dependencies
         run: composer install --no-progress --no-suggest
 
-      - name: Run PHPStan
+      - name: Run PHPStan (Static Analysis)
         run: phpstan analyse src --level=max
 
-      - name: Run Psalm
+      - name: Run Psalm (Security & Type Checking)
         run: psalm
 
-      - name: Run CodiumAI Review
-        uses: CodiumAI/github-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload results
+      - name: Upload Analysis Results
         uses: actions/upload-artifact@v3
         with:
-          name: php-code-review
+          name: php-code-review-results
           path: reports/
