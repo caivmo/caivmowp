@@ -29,7 +29,7 @@ jobs:
       - name: Get changed PHP files in wp-content/test
         id: changed-files
         run: |
-          CHANGED_FILES=$(git diff --diff-filter=d --name-only origin/${{ github.event.pull_request.base.ref }} | grep '^wp-content/test/.*\.php$' || true)
+          CHANGED_FILES=$(git diff --name-only --diff-filter=AM origin/${{ github.event.pull_request.base.ref }}...HEAD | grep '^wp-content/test/.*\.php$' || true)
 
           if [[ -z "$CHANGED_FILES" ]]; then
             echo "No PHP files changed in wp-content/test."
