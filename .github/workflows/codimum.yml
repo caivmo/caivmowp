@@ -1,4 +1,4 @@
-name: PHPStan Code Review
+name: PHPStan Code Review (WordPress Theme)
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
           tools: phpstan, composer
 
       - name: Install dependencies
-        run: composer install --no-progress --no-suggest
+        run: composer install --no-progress --no-suggest || true
 
-      - name: Run PHPStan Without Config
-        run: vendor/bin/phpstan analyse src --level=5 --memory-limit=1G
+      - name: Run PHPStan on WordPress Theme
+        run: vendor/bin/phpstan analyse wp-content/themes/ --level=5 --memory-limit=1G
