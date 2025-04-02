@@ -27,4 +27,4 @@ jobs:
           vendor/bin/phpcs -i  # Verificar instalación
 
       - name: Run PHPCS (WordPress Standard)
-        run: vendor/bin/phpcs --standard=WordPress wp-content/test
+        run: vendor/bin/phpcs --standard=WordPress,WordPress-Docs,WordPress-Extra wp-content/test
