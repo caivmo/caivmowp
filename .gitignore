@@ -13,7 +13,7 @@ wp-content/advanced-cache.php
 wp-content/wp-cache-config.php
 sitemap.xml
 sitemap.xml.gz
-
+/vendor
 # @TODO writable paths
 wp-content/cache/
 wp-content/backups/
@@ -55,3 +55,5 @@ Thumbs.db
 # SASS #
 ##########
 .sass-cache
+.env
+.idea/

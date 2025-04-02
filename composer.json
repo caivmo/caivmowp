@@ -5,9 +5,6 @@
             "url": "https://wpackagist.org"
         }
     ],
-    "require": {
-        "wpackagist-plugin/jetpack": "^14.4"
-    },
     "config": {
         "allow-plugins": {
             "composer/installers": true
