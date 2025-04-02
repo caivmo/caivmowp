@@ -43,5 +43,7 @@ jobs:
             echo "run-phpcs=true" >> $GITHUB_ENV
             echo "changed_files=$CHANGED_FILES" >> $GITHUB_ENV
           fi
-        
+      - name: Run PHPCS WordPress Standard
+        if: env.run-phpcs == 'true'
+        run: vendor/bin/phpcs --standard=WordPress,WordPress-Docs,WordPress-Extra ${{ env.changed_files }}
         
