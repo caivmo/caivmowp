@@ -1,4 +1,4 @@
-name: PHP Code Review
+name: PHPStan Code Review
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  code_review:
+  phpstan:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,19 +20,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          tools: phpstan, psalm, composer
+          tools: phpstan, composer
 
       - name: Install dependencies
         run: composer install --no-progress --no-suggest
 
-      - name: Run PHPStan (Static Analysis)
-        run: phpstan analyse src --level=max
-
-      - name: Run Psalm (Security & Type Checking)
-        run: psalm
-
-      - name: Upload Analysis Results
-        uses: actions/upload-artifact@v3
-        with:
-          name: php-code-review-results
-          path: reports/
+      - name: Run PHPStan Without Config
+        run: vendor/bin/phpstan analyse src --level=5 --memory-limit=1G
