@@ -41,9 +41,15 @@ jobs:
             echo "Changed PHP files:"
             echo "$CHANGED_FILES"
             echo "run-phpcs=true" >> $GITHUB_ENV
-            echo "changed_files=$CHANGED_FILES" >> $GITHUB_ENV
+            
+            # Guardar la lista de archivos en un solo string separado por espacios
+            FILES=$(echo "$CHANGED_FILES" | tr '\n' ' ')
+            echo "changed_files=$FILES" >> $GITHUB_ENV
           fi
       - name: Run PHPCS WordPress Standard
         if: env.run-phpcs == 'true'
-        run: vendor/bin/phpcs --standard=WordPress,WordPress-Docs,WordPress-Extra ${{ env.changed_files }}
+        run: |
+          echo "Running PHPCS on: ${{ env.changed_files }}"
+          echo "${{ env.changed_files }}" | xargs vendor/bin/phpcs --standard=WordPress,WordPress-Docs,WordPress-Extra
+        
         
