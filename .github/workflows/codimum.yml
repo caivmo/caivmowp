@@ -1,4 +1,4 @@
-name: PHPStan Code Review (WordPress Theme)
+name: PHP Code Review (WordPress Theme)
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  phpstan:
+  phpstan_phpcs:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,10 +20,13 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          tools: phpstan, composer
+          tools: phpstan, phpcs, composer
 
       - name: Install dependencies
         run: composer install --no-progress --no-suggest || true
 
-      - name: Run PHPStan on WordPress Theme
+      - name: Run PHPStan (Static Analysis)
         run: vendor/bin/phpstan analyse wp-content/test --level=5 --memory-limit=1G
+
+      - name: Run PHP CodeSniffer (Code Style & Formatting)
+        run: vendor/bin/phpcs --standard=WordPress wp-content/test
