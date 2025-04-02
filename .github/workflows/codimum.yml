@@ -1,15 +1,11 @@
-name: PHP Code Review
+name: WordPress Code Standard Validator
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
-      - main
-
+      - master
 jobs:
-  code_review:
+  phpcs_wordpress:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,24 +16,24 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          tools: phpstan, psalm, composer
+          tools: composer, phpcs
 
-      - name: Install dependencies
-        run: composer install --no-progress --no-suggest
+      - name: Install Composer dependencies
+        run: composer install
 
-      - name: Run PHPStan
-        run: phpstan analyse src --level=max
+      - name: Install WordPress Coding Standards
+        run: |
+          vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs
+          vendor/bin/phpcs -i  # Verificar instalación
 
-      - name: Run Psalm
-        run: psalm
-
-      - name: Run CodiumAI Review
-        uses: CodiumAI/github-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload results
-        uses: actions/upload-artifact@v3
-        with:
-          name: php-code-review
-          path: reports/
+      - name: Run PHPCS on changed PHP files
+        run: |
+          # Obtenemos la lista de archivos PHP modificados entre la base del PR y el commit actual
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '\.php$' || true)
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No PHP files changed."
+            exit 0
+          fi
+          echo "Changed PHP files: $CHANGED_FILES"
+          vendor/bin/phpcs --standard=WordPress,WordPress-Docs,WordPress-Extra $CHANGED_FILES
+        

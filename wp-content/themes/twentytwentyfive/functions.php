@@ -156,3 +156,13 @@ if ( ! function_exists( 'twentytwentyfive_format_binding' ) ) :
 		}
 	}
 endif;
+
+if ( ! function_exists( 'clear_cache_pantheon' ) ) :
+	function clear_cache_pantheon($post_id) {
+		add_action( 'update_option_sidebars_widgets', function($post_id) {
+			$post = 'post-' . $post_id;
+			pantheon_wp_clear_edge_keys( array( $post ) );
+		});
+	}
+endif;
+add_action( 'save_post', 'clear_cache_pantheon' );
