@@ -1,13 +1,9 @@
 name: WordPress Code Standard Validator
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
-
 jobs:
   phpcs_wordpress:
     runs-on: ubuntu-latest
