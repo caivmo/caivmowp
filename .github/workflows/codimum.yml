@@ -26,11 +26,14 @@ jobs:
           vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs
           vendor/bin/phpcs -i  # Verificar instalación
 
+          - name: Fetch full history (fix ambiguous ref issue)
+          run: git fetch --prune --unshallow
+        
       - name: Get changed PHP files in wp-content/test
         id: changed-files
         run: |
-          CHANGED_FILES=$(git diff --name-only --diff-filter=AM origin/${{ github.event.pull_request.base.ref }}...HEAD | grep '^wp-content/test/.*\.php$' || true)
-
+          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT origin/${{ github.event.pull_request.base.ref }} | grep '^wp-content/test/.*\.php$' || true)
+      
           if [[ -z "$CHANGED_FILES" ]]; then
             echo "No PHP files changed in wp-content/test."
             echo "run-phpcs=false" >> $GITHUB_ENV
