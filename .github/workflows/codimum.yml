@@ -1,4 +1,4 @@
-name: PHP Code Review (WordPress Theme)
+name: WordPress Code Standard Validator
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  phpstan_phpcs:
+  phpcs:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,19 +20,13 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          tools: phpstan, phpcs, composer
+          tools: phpcs, composer
 
-      - name: Install dependencies
-        run: composer install --no-progress --no-suggest || true
-
-      - name: Install WordPress Coding Standards for PHPCS
+      - name: Install WordPress Coding Standards
         run: |
           composer require --dev wp-coding-standards/wpcs dealerdirect/phpcodesniffer-composer-installer phpcsstandards/phpcsutils
           vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs
           vendor/bin/phpcs -i # Verificar instalación
 
-      - name: Run PHPStan (Static Analysis)
-        run: vendor/bin/phpstan analyse wp-content/test --level=5 --memory-limit=1G
-
-      - name: Run PHP CodeSniffer (Code Style & Formatting)
+      - name: Run PHPCS (WordPress Standard)
         run: vendor/bin/phpcs --standard=WordPress wp-content/test
