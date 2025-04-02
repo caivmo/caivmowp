@@ -27,7 +27,7 @@ jobs:
 
       - name: Install WordPress Coding Standards for PHPCS
         run: |
-          git clone -b master https://github.com/WordPress/WordPress-Coding-Standards.git wpcs
+          git clone -b trunk https://github.com/WordPress/WordPress-Coding-Standards.git wpcs
           vendor/bin/phpcs --config-set installed_paths wpcs
           vendor/bin/phpcs -i # Verify installation
 
