@@ -25,6 +25,12 @@ jobs:
       - name: Install dependencies
         run: composer install --no-progress --no-suggest || true
 
+      - name: Install WordPress Coding Standards for PHPCS
+        run: |
+          git clone -b master https://github.com/WordPress/WordPress-Coding-Standards.git wpcs
+          vendor/bin/phpcs --config-set installed_paths wpcs
+          vendor/bin/phpcs -i # Verify installation
+
       - name: Run PHPStan (Static Analysis)
         run: vendor/bin/phpstan analyse wp-content/test --level=5 --memory-limit=1G
 
