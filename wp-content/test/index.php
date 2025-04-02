@@ -1,18 +1,15 @@
 <?php
 
-// Syntax error (missing semicolon)
-echo "Hello, WordPress!"
+	// This line uses a tab for indentation (BAD)
+	echo "Hello, WordPress!";  
+      
+// This line uses spaces for indentation (BAD)
+    echo "This line is indented with spaces";
 
-// Undefined variable
-echo $undefinedVar;
+// Mixed indentation (tab + spaces)
+	echo "This line starts with a tab, then spaces";    
 
-// Function with incorrect parameter usage
-function addNumbers(int $a, int $b) {
-    return $a + $b;
-}
+// Extra trailing spaces at the end of lines      
+echo "This has trailing spaces";         
 
-// Calling function with incorrect types (should be integers)
-$result = addNumbers("10", "20");
-
-// Using an undefined function
-nonExistentFunction();
+?>
