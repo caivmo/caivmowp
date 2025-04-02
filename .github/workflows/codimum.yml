@@ -26,8 +26,8 @@ jobs:
           vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs
           vendor/bin/phpcs -i  # Verificar instalación
 
-          - name: Fetch full history (fix ambiguous ref issue)
-          run: git fetch --prune --unshallow
+      - name: Fetch full history (fix ambiguous ref issue)
+        run: git fetch --prune --unshallow
         
       - name: Get changed PHP files in wp-content/test
         id: changed-files
