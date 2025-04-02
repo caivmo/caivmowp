@@ -23,4 +23,3 @@ if ( isset( $_GET['id'] ) ) {
 // Código adicional sin comentarios ni documentación
 
 echo 'El ID es: ' . $id;
-s
