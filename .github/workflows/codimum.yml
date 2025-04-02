@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  phpcs:
+  phpcs_wordpress:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,9 +24,6 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install
-
-      - name: Allow Composer Plugins
-        run: composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
 
       - name: Install WordPress Coding Standards
         run: |
