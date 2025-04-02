@@ -27,7 +27,6 @@ jobs:
 
       - name: Install WordPress Coding Standards
         run: |
-          composer require --dev wp-coding-standards/wpcs squizlabs/php_codesniffer dealerdirect/phpcodesniffer-composer-installer phpcsstandards/phpcsutils
           vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs
           vendor/bin/phpcs -i  # Verificar instalación
 
