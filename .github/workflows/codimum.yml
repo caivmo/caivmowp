@@ -20,16 +20,16 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          tools: phpcs, composer
+          tools: composer, phpcs
 
       - name: Allow Composer Plugins
         run: composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
 
       - name: Install WordPress Coding Standards
         run: |
-          composer require --dev wp-coding-standards/wpcs dealerdirect/phpcodesniffer-composer-installer phpcsstandards/phpcsutils
+          composer require --dev wp-coding-standards/wpcs squizlabs/php_codesniffer dealerdirect/phpcodesniffer-composer-installer phpcsstandards/phpcsutils
           vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs
-          vendor/bin/phpcs -i # Verificar instalación
+          vendor/bin/phpcs -i  # Verificar instalación
 
       - name: Run PHPCS (WordPress Standard)
         run: vendor/bin/phpcs --standard=WordPress wp-content/test
