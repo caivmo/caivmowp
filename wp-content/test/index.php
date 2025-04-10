@@ -10,8 +10,6 @@
  * @license GPL-2.0-or-later
  * @link https://www.gnu.org/licenses/gpl-2.0.html
  * @description This is a test file for WordPress coding standards.
- * 
- * 
  */
 
 echo 'Hello World!';
