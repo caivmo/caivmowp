@@ -2,3 +2,6 @@ name: caivmowp
 recipe: wordpress
 config:
   webroot: .
+services:
+  phpmyadmin:
+    type: phpmyadmin
