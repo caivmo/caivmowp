@@ -32,9 +32,6 @@ jobs:
 
       - name: Update WordPress Core
         run: wp core download --force
-      
-      - name: Update WordPress Themes
-        run: wp theme update --all
 
       - name: Verificar cambios en wp-admin y wp-includes
         run: |
@@ -54,15 +51,15 @@ jobs:
             git checkout -B autopilot
           fi
 
-          # Agregar cambios a los directorios wp-admin, wp-includes, wp-content y wp-content/themes
-          git add wp-admin wp-includes wp-content wp-content/themes composer.lock
+          # Agregar cambios a los directorios wp-admin, wp-includes
+          git add wp-admin wp-includes composer.lock
 
           # Obtener la fecha actual
           DATE=$(date +'%Y-%m-%d')
 
           # Hacer commit solo si hay cambios
           if git diff --cached --quiet; then
-            echo "No hay cambios en wp-admin, wp-includes, wp-content o wp-content/themes. No se hace commit."
+            echo "No hay cambios en wp-admin, wp-includes. No se hace commit."
           else
             git commit -m "Autopilot: Composer Update & WP Core Update - $DATE"
             git push origin autopilot
