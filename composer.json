@@ -16,5 +16,8 @@
         "squizlabs/php_codesniffer": "^3.12",
         "phpcsstandards/phpcsutils": "^1.0",
         "wp-coding-standards/wpcs": "^2.3.0"
+    },
+    "require": {
+        "wpackagist-plugin/pantheon-advanced-page-cache": "2.1.0"
     }
 }
