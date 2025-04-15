@@ -1,0 +1,31 @@
+name: Composer Update
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-composer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
+
+      - name: Run Composer Update
+        run: composer update --no-interaction --no-progress
+
+      - name: Commit changes
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git checkout -b update-dependencies || git checkout update-dependencies
+          git add composer.lock
+          git diff --cached --quiet || git commit -m "chore: update composer dependencies"
+          git push origin autopilot
