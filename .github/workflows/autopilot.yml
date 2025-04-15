@@ -1,6 +1,8 @@
 name: Autopilot
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 * *'  # A las 00:00 UTC del día 1 de cada mes
 
 jobs:
   update-composer:
@@ -42,10 +44,13 @@ jobs:
             git add composer.lock
           fi
 
+          # Obtener la fecha actual
+          DATE=$(date +'%Y-%m-%d')
+
           # Hacer commit solo si hay cambios
           if git diff --cached --quiet; then
             echo "No hay cambios en composer.lock. No se hace commit."
           else
-            git commit -m "chore: update composer dependencies"
+            git commit -m "Autopilot: Composer Update - $DATE"
             git push origin autopilot
           fi
