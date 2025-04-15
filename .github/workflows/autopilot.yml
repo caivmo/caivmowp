@@ -23,11 +23,22 @@ jobs:
       - name: Run Composer Update
         run: composer update --no-interaction --no-progress
 
-      - name: Commit changes
+      - name: Commit and push changes to autopilot branch
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
-          git checkout -b update-dependencies || git checkout update-dependencies
+
+          # Fetch all branches
+          git fetch origin
+
+          # Verificar si el branch 'autopilot' existe en remoto
+          if git ls-remote --exit-code --heads origin autopilot; then
+            git checkout autopilot
+            git pull origin autopilot
+          else
+            git checkout -b autopilot
+          fi
+
           git add composer.lock
           git diff --cached --quiet || git commit -m "chore: update composer dependencies"
-          git push origin update-dependencies
+          git push origin autopilot
