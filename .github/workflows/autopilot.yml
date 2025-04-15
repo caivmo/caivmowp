@@ -24,21 +24,6 @@ jobs:
       - name: Run Composer Update
         run: composer update --no-interaction --no-progress
 
-      - name: Install wp-cli
-        run: |
-          curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-          chmod +x wp-cli.phar
-          sudo mv wp-cli.phar /usr/local/bin/wp
-
-      - name: Update WordPress Core
-        run: wp core update
-      
-      - name: Update WordPress Themes
-        run: wp theme update --all
-
-      - name: Verificar cambios en wp-admin y wp-includes
-        run: |
-          git diff --exit-code wp-admin wp-includes || echo "Hay cambios en wp-admin o wp-includes."
       - name: Commit and push changes to autopilot branch
         run: |
           git config user.name "GitHub Action"
@@ -54,16 +39,18 @@ jobs:
             git checkout -B autopilot
           fi
 
-          # Agregar cambios a los directorios wp-admin, wp-includes, wp-content y wp-content/themes
-          git add wp-admin wp-includes wp-content wp-content/themes composer.lock
+          # Agregar composer.lock solo si existe
+          if [ -f composer.lock ]; then
+            git add composer.lock
+          fi
 
           # Obtener la fecha actual
           DATE=$(date +'%Y-%m-%d')
 
           # Hacer commit solo si hay cambios
           if git diff --cached --quiet; then
-            echo "No hay cambios en wp-admin, wp-includes, wp-content o wp-content/themes. No se hace commit."
+            echo "No hay cambios en composer.lock. No se hace commit."
           else
-            git commit -m "Autopilot: Composer Update & WP Core Update - $DATE"
+            git commit -m "Autopilot: Composer Update - $DATE"
             git push origin autopilot
           fi
