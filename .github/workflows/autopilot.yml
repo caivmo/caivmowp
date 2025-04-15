@@ -32,12 +32,20 @@ jobs:
 
           # Verificar si el branch 'autopilot' existe en remoto
           if git ls-remote --exit-code --heads origin autopilot; then
-            git checkout autopilot
-            git pull origin autopilot
+            git checkout -B autopilot origin/autopilot
           else
-            git checkout -b autopilot
+            git checkout -B autopilot
           fi
 
-          git add composer.lock
-          git diff --cached --quiet || git commit -m "chore: update composer dependencies"
-          git push origin autopilot
+          # Agregar composer.lock solo si existe
+          if [ -f composer.lock ]; then
+            git add composer.lock
+          fi
+
+          # Hacer commit solo si hay cambios
+          if git diff --cached --quiet; then
+            echo "No hay cambios en composer.lock. No se hace commit."
+          else
+            git commit -m "chore: update composer dependencies"
+            git push origin autopilot
+          fi
