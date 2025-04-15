@@ -1,5 +1,4 @@
-name: Composer Update
-
+name: Autopilot
 on:
   workflow_dispatch:
 
