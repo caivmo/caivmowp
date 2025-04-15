@@ -28,4 +28,4 @@ jobs:
           git checkout -b update-dependencies || git checkout update-dependencies
           git add composer.lock
           git diff --cached --quiet || git commit -m "chore: update composer dependencies"
-          git push origin autopilot
+          git push origin update-dependencies
