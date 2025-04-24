@@ -18,6 +18,7 @@
         "wp-coding-standards/wpcs": "^2.3.0"
     },
     "require": {
-        "wpackagist-plugin/pantheon-advanced-page-cache": "^2.1.0"
+        "wpackagist-plugin/pantheon-advanced-page-cache": "^2.1.0",
+        "wpackagist-theme/twentytwentyfour": "^1.3"
     }
 }
