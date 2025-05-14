@@ -16,11 +16,8 @@ jobs:
     - name: Echo build start
       run: echo "🚀 Starting build process..."
     
-    #- name: Long running process
-    #  run: sleep 360
-    
     - name: Simulate failure
-      run: sudo -s
+      run: exit 1
     
     - name: Echo build complete
       run: echo "✅ Build completed successfully!"
