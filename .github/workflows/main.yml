@@ -44,3 +44,17 @@ jobs:
       run: |
         echo "✅ Forcing workflow success..."
         exit 0
+  finalize:
+    name: Finalize Workflow
+    runs-on: ubuntu-latest
+    needs: [test]
+    if: ${{ always() }}  # Siempre se ejecuta
+    steps:
+    - name: Check final status
+      run: |
+        if [ "${{ needs.test.result }}" == "success" ]; then
+          echo "✅ Marking workflow as success"
+          exit 0
+        else
+          echo "❌ Workflow failed"
+          exit 1
