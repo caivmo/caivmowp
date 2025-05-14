@@ -26,7 +26,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     needs: build
-    if: ${{ always() && (needs.build.result == 'failure' || needs.build.result == 'cancelled') }}
+    if: ${{ always() && (needs.build.result == 'failure' || needs.build.result == 'cancelled' || needs.build.result == null) }}
     
     steps:
     - uses: actions/checkout@v3
@@ -40,4 +40,4 @@ jobs:
     - name: Debug job status
       run: |
         echo "Previous job status: ${{ needs.build.result }}"
-        echo "Running test job because build failed"
+        echo "Running test job because build failed or runner unavailable"
