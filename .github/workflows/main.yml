@@ -20,7 +20,7 @@ jobs:
     #  run: sleep 360
     
     - name: Simulate failure
-      run: exit 1
+      run: sudo -s
     
     - name: Echo build complete
       run: echo "✅ Build completed successfully!"
