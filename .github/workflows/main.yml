@@ -15,7 +15,9 @@ jobs:
     
     - name: Echo build start
       run: echo "🚀 Starting build process..."
-
+    - name: Error step
+      run: |
+        rm test.php
   test:
     name: Test
     runs-on: ubuntu-latest
