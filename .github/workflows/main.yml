@@ -14,6 +14,10 @@ jobs:
     
     - name: Echo build start
       run: echo "🚀 Starting build process..."
+    
+    - name: Failed step
+      run:
+        rm test.php
 
   test:
     name: Test
