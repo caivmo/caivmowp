@@ -5,55 +5,36 @@ on:
     branches: 
       - 'autopilot'
 jobs:
-  build:
-    name: Build
+  check-runner:
+    name: Check Self-hosted Runner
     runs-on: ubuntu-latest
-    timeout-minutes: 1
+    outputs:
+      runner_status: ${{ steps.check.outputs.runner_status }}
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Echo build start
-      run: echo "🚀 Starting build process..."
-    
-    - name: Failed step
-      run:
-        rm test.php
+      - name: Check runner status
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RUNNER_NAME="self-hosted"
+          echo "🔍 Verificando estado del runner: $RUNNER_NAME"
+          STATUS=$(gh api repos/${{ github.repository }}/actions/runners \
+            --paginate \
+            --jq ".runners[] | select(.name==\"$RUNNER_NAME\") | .status")
 
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    needs: build
-    if: always() && (needs.build.result == 'failure' || needs.build.result == 'cancelled')
+          if [ "$STATUS" = "online" ]; then
+            echo "✅ Runner está online"
+            echo "runner_status=online" >> "$GITHUB_OUTPUT"
+          else
+            echo "❌ Runner está offline"
+            echo "runner_status=offline" >> "$GITHUB_OUTPUT"
+          fi
+
+  maybe-run-build:
+    name: Build (only if runner is online)
+    needs: check-runner
+    if: needs.check-runner.outputs.runner_status == 'online'
+    runs-on: [self-hosted]
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Echo test start
-      run: echo "🧪 Starting test process..."
-    
-    - name: Echo dependencies
-      run: echo "📦 Installing test dependencies..."
-    
-    - name: Debug job status
-      run: |
-        echo "Previous job status: ${{ needs.build.result }}"
-        echo "Running test job because build failed or was cancelled"
-    
-    - name: Force workflow success
-      run: |
-        echo "✅ Forcing workflow success..."
-        exit 0
-  finalize:
-    name: Finalize Workflow
-    runs-on: ubuntu-latest
-    needs: [build, test]
-    if: ${{ always() }}  # Siempre se ejecuta
-    steps:
-    - name: Check final status
-      run: |
-        if [ "${{ needs.test.result }}" == "success" ] || [ "${{ needs.build.result }}" == "success" ]; then
-          echo "✅ Marking workflow as success"
-          exit 0
-        else
-          echo "❌ Workflow failed"
-          exit 1
-        fi
+      - name: Run on self-hosted
+        run: echo "🏃 Ejecutando en runner self-hosted"
