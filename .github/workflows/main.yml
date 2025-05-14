@@ -16,7 +16,7 @@ jobs:
       run: echo "🚀 Starting build process..."
     
     - name: Simulate failure
-      run: sleep 120  # Simula un tiempo de espera que excede el límite
+      run: rm test.php
     
     - name: Echo build complete
       run: echo "✅ Build completed successfully!"
