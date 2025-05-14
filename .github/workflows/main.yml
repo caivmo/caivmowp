@@ -9,9 +9,6 @@ jobs:
     name: Build
     runs-on: self-hosted
     timeout-minutes: 1
-    strategy:
-      fail-fast: true
-      max-parallel: 1
     
     steps:
     - uses: actions/checkout@v3
