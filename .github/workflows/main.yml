@@ -5,10 +5,16 @@ on:
     branches: 
       - 'autopilot'
 jobs:
+  check-runner:
+    runs-on: self-hosted
+    outputs:
+      available: ${{ steps.check-runner.outputs.available }}
+
   build:
     name: Build
-    runs-on: [self-hosted, ubuntu-latest]
+    runs-on: self-hosted
     timeout-minutes: 1
+    if: ${{ needs.check-runner.outputs.available == 'true' }}
     
     steps:
     - uses: actions/checkout@v3
