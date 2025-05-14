@@ -8,12 +8,16 @@ jobs:
   build:
     name: Build
     runs-on: self-hosted
+    timeout-minutes: 1
     
     steps:
     - uses: actions/checkout@v3
     
     - name: Echo build start
       run: echo "🚀 Starting build process..."
+    
+    - name: Long running process
+      run: sleep 360
     
     #- name: Simulate failure
     #  run: exit 1
@@ -32,6 +36,6 @@ jobs:
     
     - name: Echo test start
       run: echo "🧪 Starting test process..."
-       
+    
     - name: Echo dependencies
       run: echo "📦 Installing test dependencies..."
