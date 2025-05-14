@@ -20,7 +20,10 @@ jobs:
     
     - name: Echo build
       run: echo "🔨 Building project..."
-      
+    
+    - name: Simulate failure
+      run: exit 1
+    
     - name: Echo build complete
       run: echo "✅ Build completed successfully!"
 
