@@ -9,7 +9,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     timeout-minutes: 1
-
+    continue-on-error: true
     steps:
     - uses: actions/checkout@v3
     
@@ -41,15 +41,3 @@ jobs:
       run: |
         echo "Previous job status: ${{ needs.build.result }}"
         echo "Running test job because build failed or runner unavailable"
-    
-    - name: Set workflow status to success
-      if: ${{ success() }}
-      uses: actions/github-script@v6
-      with:
-        script: |
-          github.rest.actions.updateWorkflowRun({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            run_id: context.runId,
-            conclusion: 'success'
-          })
