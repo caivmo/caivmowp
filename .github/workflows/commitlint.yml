@@ -1,9 +1,7 @@
 name: Check Commit Messages
-
 on:
-  push:
-    branches:
-      - 'autopilot'
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
 
 jobs:
   semantic-commits:
