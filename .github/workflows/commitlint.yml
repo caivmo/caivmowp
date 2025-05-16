@@ -1,0 +1,16 @@
+name: Commit Lint
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+
+jobs:
+  check-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ahmadnassri/action-commit-lint@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test|release|deps|merge)(\\(.+\\))?: .+'

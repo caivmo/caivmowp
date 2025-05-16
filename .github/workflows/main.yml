@@ -1,0 +1,27 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: 
+      - 'autopilot'
+jobs:
+  check-runner:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verificar estado del runner
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN_TEST }}  # O tu token personal
+        run: |
+          RESPONSE=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
+                          -H "Accept: application/vnd.github+json" \
+                          https://api.github.com/repos/${{ github.repository }}/actions/runners)
+          
+          RUNNER_STATUS=$(echo "$RESPONSE" | jq -r '.runners[] | select(.name == "self-hosted") | .status')
+          
+          if [ "$RUNNER_STATUS" == "online" ]; then
+            echo "✅ El runner está online"
+          else
+            echo "❌ El runner está offline"
+            exit 1  # Esto falla el job si el runner está offline
+          fi
