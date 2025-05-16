@@ -13,16 +13,16 @@ jobs:
 
       - name: Get last commit message
         id: get_message
-        run: echo "::set-output name=msg::$(git log -1 --pretty=%B)"
+        run: echo "msg=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
 
       - name: Detect Spanish commit message
         id: detect_spanish
         run: |
           MSG="${{ steps.get_message.outputs.msg }}"
           if echo "$MSG" | grep -P '[áéíóúñÁÉÍÓÚÑ]' >/dev/null; then
-            echo "::set-output name=spanish::true"
+            echo "spanish=true" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=spanish::false"
+            echo "spanish=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Improve and translate commit message with OpenAI
