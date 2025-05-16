@@ -21,3 +21,5 @@ jobs:
             perf
             test
           scopes: ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_TEST }}
