@@ -56,3 +56,5 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           pattern: '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test|release|deps|merge)(\\(.+\\))?: .+'
+
+          
