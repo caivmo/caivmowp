@@ -1,26 +1,22 @@
-name: Commit Message Lint
+name: Check Commit Messages
 
-on: 
-  push:
-    branches:
-      - autopilot
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
 
 jobs:
-  lint-commits:
+  semantic-commits:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: amannn/action-semantic-pull-request@v5
         with:
-          node-version: 20
-
-      - name: Install commitlint
-        run: npm install --no-save @commitlint/{config-conventional,cli}
-
-      - name: Lint commit messages
-        run: |
-          git log origin/main..HEAD --pretty=format:"%s" | npx commitlint
+          types: |
+            feat
+            fix
+            chore
+            docs
+            style
+            refactor
+            perf
+            test
+          scopes: ''
