@@ -37,7 +37,7 @@ jobs:
             -H "Content-Type: application/json" \
             -d "{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"user\", \"content\": \"Improve and translate this commit message to English following Conventional Commits format: $MSG\"}]}" \
             | jq -r '.choices[0].message.content')
-          echo "::set-output name=msg::$RESPONSE"
+          echo "msg=$RESPONSE" >> $GITHUB_OUTPUT
 
       - name: Amend commit with improved message
         if: steps.detect_spanish.outputs.spanish == 'true'
@@ -57,4 +57,3 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           pattern: '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test|release|deps|merge)(\\(.+\\))?: .+'
 
-          
