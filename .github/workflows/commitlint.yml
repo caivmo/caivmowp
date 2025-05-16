@@ -1,15 +1,57 @@
-name: Commit Lint
+name: Improve Commit Message and Validate
 
 on:
   push:
     branches:
       - '**'
-  pull_request:
 
 jobs:
-  check-commits:
+  improve-commit-message:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Get last commit message
+        id: get_message
+        run: echo "::set-output name=msg::$(git log -1 --pretty=%B)"
+
+      - name: Detect Spanish commit message
+        id: detect_spanish
+        run: |
+          MSG="${{ steps.get_message.outputs.msg }}"
+          if echo "$MSG" | grep -P '[áéíóúñÁÉÍÓÚÑ]' >/dev/null; then
+            echo "::set-output name=spanish::true"
+          else
+            echo "::set-output name=spanish::false"
+          fi
+
+      - name: Improve and translate commit message with OpenAI
+        if: steps.detect_spanish.outputs.spanish == 'true'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENIA }}
+          MSG: "${{ steps.get_message.outputs.msg }}"
+        id: improve_translate
+        run: |
+          RESPONSE=$(curl https://api.openai.com/v1/chat/completions \
+            -H "Authorization: Bearer $OPENAI_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"user\", \"content\": \"Improve and translate this commit message to English following Conventional Commits format: $MSG\"}]}" \
+            | jq -r '.choices[0].message.content')
+          echo "::set-output name=msg::$RESPONSE"
+
+      - name: Amend commit with improved message
+        if: steps.detect_spanish.outputs.spanish == 'true'
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit --amend -m "${{ steps.improve_translate.outputs.msg }}"
+          git push --force
+
+  validate-commit-message:
+    needs: improve-commit-message
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - uses: ahmadnassri/action-commit-lint@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
