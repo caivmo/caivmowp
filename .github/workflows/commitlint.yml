@@ -13,7 +13,7 @@ jobs:
 
       - name: Get last commit message
         id: get_message
-        run: echo "::set-output name=msg::$(git log -1 --pretty=%B)"
+        run: echo "msg=$(git log -1 --pretty=%B)" >> $GITHUB_OUTPUT
 
       - name: Detect Spanish commit message
         id: detect_spanish
