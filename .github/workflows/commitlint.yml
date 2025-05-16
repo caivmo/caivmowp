@@ -32,10 +32,11 @@ jobs:
           MSG: "${{ steps.get_message.outputs.msg }}"
         id: improve_translate
         run: |
+          REQUEST_BODY=$(jq -n --arg msg "$MSG" '{model:"gpt-4o-mini", messages:[{role:"user", content:"Improve and translate this commit message to English following Conventional Commits format: \($msg)"}]}')
           RESPONSE=$(curl https://api.openai.com/v1/chat/completions \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
-            -d "{\"model\": \"gpt-4o-mini\", \"messages\": [{\"role\": \"user\", \"content\": \"Improve and translate this commit message to English following Conventional Commits format: $MSG\"}]}" \
+            -d "$REQUEST_BODY" \
             | jq -r '.choices[0].message.content')
           echo "msg=$RESPONSE" >> $GITHUB_OUTPUT
 
