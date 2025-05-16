@@ -33,11 +33,13 @@ jobs:
         id: improve_translate
         run: |
           REQUEST_BODY=$(jq -n --arg msg "$MSG" '{model:"gpt-4o-mini", messages:[{role:"user", content:"Improve and translate this commit message to English following Conventional Commits format: \($msg)"}]}')
+          echo "🔍 Request: $REQUEST_BODY"
           RESPONSE=$(curl https://api.openai.com/v1/chat/completions \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
             -d "$REQUEST_BODY" \
             | jq -r '.choices[0].message.content')
+          echo "💬 AI Response: $RESPONSE"
           echo "msg=$RESPONSE" >> $GITHUB_OUTPUT
 
       - name: Amend commit with improved message
