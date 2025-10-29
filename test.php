@@ -18,7 +18,7 @@ $price = 19.99;
 
 echo "Name: $name\n";
 echo "Age: $age\n";
-echo "Price: $" . number_format($price, 2) . "\n\n";
+echo "Price: $" . number_format($price, 2, '.', '') . "\n\n";
 
 // 3. Arrays test
 echo "3. Arrays Test:\n";
