@@ -49,8 +49,8 @@ function calculate($a, $b, $operation = 'add') {
         case 'subtract': return $a - $b;
         case 'multiply': return $a * $b;
         case 'divide':
-            if ((float)$b === 0.0) {
-                return null;
+            if ($b == 0 || (is_numeric($b) && abs((float)$b) < PHP_FLOAT_EPSILON)) {
+                return null; // or return 0 to keep numeric type, based on requirements
             }
             return $a / $b;
         default:
