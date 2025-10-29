@@ -48,8 +48,13 @@ function calculate($a, $b, $operation = 'add') {
         case 'add': return $a + $b;
         case 'subtract': return $a - $b;
         case 'multiply': return $a * $b;
-        case 'divide': return $b != 0 ? $a / $b : 'Cannot divide by zero';
-        default: return 'Unknown operation';
+        case 'divide':
+            if ((float)$b === 0.0) {
+                return null;
+            }
+            return $a / $b;
+        default:
+            return null;
     }
 }
 
