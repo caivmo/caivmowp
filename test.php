@@ -1,20 +1,47 @@
 <?php
+/**
+ * Script PHP Sencillo
+ * Un ejemplo básico de PHP
+ */
 
-echo "Hello, World!\n";
+// Saludo simple
+echo "¡Hola! Este es un script PHP sencillo.\n\n";
 
-// Test variable
-$message = "This is a test PHP file";
-echo $message . "\n";
+// Variables básicas
+$nombre = "Mundo";
+$edad = 2025;
+$precio = 99.99;
 
-// Test array
-$items = ['apple', 'banana', 'orange'];
-foreach ($items as $item) {
-    echo "- " . $item . "\n";
+echo "Nombre: $nombre\n";
+echo "Año: $edad\n";
+echo "Precio: $" . number_format($precio, 2) . "\n\n";
+
+// Lista de frutas
+$frutas = ["Manzana", "Banana", "Naranja"];
+
+echo "Mis frutas favoritas:\n";
+foreach ($frutas as $fruta) {
+    echo "- $fruta\n";
 }
 
-// Test function
-function greet($name) {
-    return "Hello, " . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . "!";
+echo "\n";
+
+// Función simple
+function saludar($persona) {
+    return "¡Hola, $persona! ¿Cómo estás?";
 }
 
-echo greet("Developer") . "\n";
+echo saludar("Desarrollador") . "\n";
+
+// Operaciones matemáticas
+$a = 10;
+$b = 5;
+
+echo "\nOperaciones:\n";
+echo "$a + $b = " . ($a + $b) . "\n";
+echo "$a - $b = " . ($a - $b) . "\n";
+echo "$a * $b = " . ($a * $b) . "\n";
+echo "$a / $b = " . ($a / $b) . "\n";
+
+echo "\n¡Script completado exitosamente!\n";
+?>
