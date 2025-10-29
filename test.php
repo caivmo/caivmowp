@@ -92,4 +92,4 @@ echo "Timestamp: " . time() . "\n\n";
 
 echo "=== All Tests Completed ===\n";
 echo "PHP Version: " . PHP_VERSION . "\n";
-echo "Server: " . $_SERVER['SERVER_SOFTWARE'] ?? 'Unknown' . "\n";
+echo "Server: " . ($_SERVER['SERVER_SOFTWARE'] ?? 'Unknown') . "\n";
