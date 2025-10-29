@@ -14,7 +14,7 @@ foreach ($items as $item) {
 
 // Test function
 function greet($name) {
-    return "Hello, " . $name . "!";
+    return "Hello, " . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . "!";
 }
 
 echo greet("Developer") . "\n";
